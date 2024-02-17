@@ -32,11 +32,11 @@ class User(db.Model):
 
     @classmethod
     def get_by_email(cls, email):
-        cls.query.filter_by(email=email).first()
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def get_by_username(cls, username):
-        cls.query.filter_by(username=username).first()
+        return cls.query.filter_by(username=username).first()
     
     def save(self):
         db.session.add(self)
