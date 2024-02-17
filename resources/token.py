@@ -26,8 +26,8 @@ class TokenResource(Resource):
         if not user or not check_password(password, user.password):
             return {'message': 'Correo o contraseña incorrectos'}, HTTPStatus.UNAUTHORIZED
         
-        # if user.is_active is False:
-        #     return {'message': 'Usuario inactivo'}, HTTPStatus.FORBIDDEN
+        if user.is_active is False:
+            return {'message': 'Usuario inactivo'}, HTTPStatus.FORBIDDEN
         
         access_token = create_access_token(identity=user.id, fresh=True)
         refresh_token = create_refresh_token(identity=user.id)
