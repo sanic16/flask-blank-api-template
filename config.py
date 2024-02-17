@@ -34,3 +34,10 @@ class Config:
     JWT_COOKIE_SAMESITE = 'None'
     JWT_COOKIE_CSRF_PROTECT = False
     JWT_TOKEN_LOCATION = ['headers', 'cookies'] 
+
+    MAIL_SERVER = 'smtp.sendgrid.net'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'apikey'
+    MAIL_PASSWORD = os.getenv('SENDGRID_API_KEY')
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
