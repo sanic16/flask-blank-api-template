@@ -8,19 +8,22 @@ def hash_password(password):
 def check_password(password, hashed):
     return pbkdf2_sha256.verify(password, hashed)
 
-def generate_confirmation_token(email, salt=None):
+def generate_confirmation_token(*args, salt=None):
     serializer = URLSafeTimedSerializer(current_app.config.get('SECRET_KEY'))
-    return serializer.dumps(email, salt=salt)
 
+    return serializer.dumps(args, salt=salt)
+
+    
 def verify_token(token, max_age=(30*1800), salt=None):
     serializer = URLSafeTimedSerializer(current_app.config.get('SECRET_KEY'))
+    
     try:
-        email = serializer.loads(
+        keys = serializer.loads(
             token,
-            max_age=max_age,
-            salt=salt
+            salt=salt,
+            max_age=max_age
         )
     except:
         return False
     
-    return email
+    return keys

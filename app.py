@@ -10,7 +10,8 @@ from config import Config
 from models.user import User
 from models.token import TokenBlocklist
 
-from resources.user import (UserListResource, UserActivateResource)
+from resources.user import (UserListResource, UserActivateResource, UserRecoverResource, UserPasswordResource, 
+                            UserChangePasswordResource)
 from resources.token import (TokenResource)
 
 def create_app():
@@ -29,8 +30,13 @@ def register_extensions(app):
 
 def register_resources(app):
     api = Api(app=app)
+
     api.add_resource(UserListResource, '/api/users')   
+    api.add_resource(UserChangePasswordResource, '/api/users/change-password')
+
     api.add_resource(UserActivateResource, '/api/users/activate/<string:token>')
+    api.add_resource(UserRecoverResource, '/api/users/recover')
+    api.add_resource(UserPasswordResource, '/api/users/password/<string:token>')
 
     api.add_resource(TokenResource, '/api/token') 
 
