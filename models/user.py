@@ -29,4 +29,16 @@ class User(db.Model):
         server_default=db.func.now(),
         onupdate=db.func.now()
     )
+
+    @classmethod
+    def get_by_email(cls, email):
+        cls.query.filter_by(email=email).first()
+
+    @classmethod
+    def get_by_username(cls, username):
+        cls.query.filter_by(username=username).first()
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
     

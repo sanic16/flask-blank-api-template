@@ -8,6 +8,9 @@ from flask_restful import Api
 from config import Config
 
 from models.user import User
+from models.token import TokenBlocklist
+
+from resources.user import (UserListResource)
 
 def create_app():
     app = Flask(__name__)
@@ -23,7 +26,8 @@ def register_extensions(app):
     migrate = Migrate(app=app, db=db)
 
 def register_resources(app):
-    api = Api(app=app)    
+    api = Api(app=app)
+    api.add_resource(UserListResource, '/api/users')    
 
 app = create_app()
 
