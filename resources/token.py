@@ -19,7 +19,7 @@ from marshmallow import ValidationError
 from dotenv import load_dotenv
 from extensions import db
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 load_dotenv()
 
@@ -55,8 +55,8 @@ class TokenResource(Resource):
         user = user_schema.dump(user)
 
 
-        access_token_expire = datetime.now(timezone.utc) + current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES')
-        refresh_token_expire = datetime.now(timezone.utc) + current_app.config.get('JWT_REFRESH_TOKEN_EXPIRES')
+        access_token_expire = datetime.now() + timedelta(minutes=15)
+        refresh_token_expire = datetime.now() + timedelta(days=7)
 
         secure = os.getenv('ENVIRONMENT') == 'production'
 
@@ -75,7 +75,7 @@ class RefreshResource(Resource):
 
         user = user_schema.dump(user)
 
-        access_token_expire = current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES')
+        access_token_expire = datetime.now() + timedelta(minutes=15)
         
         secure = os.getenv('ENVIRONMENT') == 'production'
 
