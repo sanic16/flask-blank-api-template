@@ -7,7 +7,8 @@ from extensions import db, jwt, mail
 
 from resources.user import (UserListResource, UserActivateResource, UserRecoverResource, UserPasswordResource, 
                             UserChangePasswordResource)
-from resources.token import (TokenResource, RefreshResource, RevokeResource, RevokeRefreshResource)
+from resources.token import (TokenResource, RefreshResource, RevokeResource, RevokeRefreshResource,
+                            TokenMobileResource, RefreshMobileResource)
 
 from models.token import TokenBlocklist
 
@@ -35,17 +36,21 @@ def register_extensions(app):
 def register_resources(app):
     api = Api(app=app)
 
-    api.add_resource(UserListResource, '/api/users')   
-    api.add_resource(UserChangePasswordResource, '/api/users/change-password')
+    api.add_resource(UserListResource, '/api/v1/users')   
+    api.add_resource(UserChangePasswordResource, '/api/v1/users/change-password')
 
-    api.add_resource(UserActivateResource, '/api/users/activate/<string:token>')
-    api.add_resource(UserRecoverResource, '/api/users/recover')
-    api.add_resource(UserPasswordResource, '/api/users/password/<string:token>')
+    api.add_resource(UserActivateResource, '/api/v1/users/activate/<string:token>')
+    api.add_resource(UserRecoverResource, '/api/v1/users/recover')
+    api.add_resource(UserPasswordResource, '/api/v1/users/password/<string:token>')
 
-    api.add_resource(TokenResource, '/api/token') 
-    api.add_resource(RefreshResource, '/api/refresh')
-    api.add_resource(RevokeResource, '/api/revoke')
-    api.add_resource(RevokeRefreshResource, '/api/revoke-refresh')
+    api.add_resource(TokenResource, '/api/v1/token') 
+    api.add_resource(RefreshResource, '/api/v1/refresh')
+    api.add_resource(RevokeResource, '/api/v1/revoke')
+    api.add_resource(RevokeRefreshResource, '/api/v1/revoke-refresh')
+    
+    # Mobile
+    api.add_resource(TokenMobileResource, '/api/v1/mobile/token')
+    api.add_resource(RefreshMobileResource, '/api/v1/mobile/refresh')
 
 app = create_app()
 

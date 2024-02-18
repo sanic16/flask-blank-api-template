@@ -102,4 +102,58 @@ class RevokeRefreshResource(Resource):
         db.session.commit()
 
         return {'message': 'Se ha revocado el refresh token'}, HTTPStatus.OK
+    
+class TokenMobileResource(Resource):
+    def post(self):
+        json_data = request.get_json()
+
+        try:
+            data = user_schema.load(data=json_data, partial=('username', ))
+        except ValidationError as error:
+            return {
+                'message': 'Credenciales incompletas', 
+                'errors': error.messages
+            }, HTTPStatus.BAD_REQUEST
+        
+        password = json_data.get('password')
+        email = data.get('email')
+
+        user = User.get_by_email(email=email)
+
+        if user is None or not check_password(password, user.password):
+            return {'message': 'Credenciales incorrectas'}, HTTPStatus.UNAUTHORIZED
+        
+        if user.is_active is False:
+            return {'message': 'Usuario inactivo'}, HTTPStatus.FORBIDDEN
+        
+        access_token = create_access_token(identity=user.id, fresh=True)
+        refresh_token = create_refresh_token(identity=user.id)
+
+        user = user_schema.dump(user)
+
+        access_token_expire = datetime.now() + timedelta(minutes=15)
+        refresh_token_expire = datetime.now() + timedelta(days=7)
+
+        return {
+            'user': user,
+            'access_token': access_token,
+            'refresh_token': refresh_token
+        }, HTTPStatus.OK
+    
+class RefreshMobileResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity=current_user, fresh=False)
+
+        user = User.get_by_id(user_id=current_user)
+
+        user = user_schema.dump(user)
+
+        return {
+            'user': user,
+            'access_token': access_token
+        }, HTTPStatus.OK 
+
+
 
