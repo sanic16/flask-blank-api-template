@@ -33,7 +33,7 @@ class Config:
     JWT_COOKIE_SECURE = False
     JWT_COOKIE_SAMESITE = 'None'
     JWT_COOKIE_CSRF_PROTECT = False
-    JWT_TOKEN_LOCATION = ['headers', 'cookies'] 
+    JWT_TOKEN_LOCATION = ['cookies', 'headers'] 
 
     MAIL_SERVER = 'smtp.sendgrid.net'
     MAIL_PORT = 587
