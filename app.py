@@ -44,7 +44,7 @@ def register_resources(app):
 
     api.add_resource(TokenResource, '/api/token') 
     api.add_resource(RefreshResource, '/api/refresh')
-    api.add_resource(RevokeResource, 'api/revoke')
+    api.add_resource(RevokeResource, '/api/revoke')
 
 app = create_app()
 
