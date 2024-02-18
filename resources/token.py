@@ -10,12 +10,16 @@ from flask_jwt_extended import (
 )
 
 from models.user import User
+from models.token import TokenBlocklist
 from schemas.user import UserSchema
 import os
 
 from utils import check_password
 from marshmallow import ValidationError
 from dotenv import load_dotenv
+from extensions import db
+
+from datetime import datetime, timezone
 
 load_dotenv()
 
@@ -61,5 +65,31 @@ class TokenResource(Resource):
         response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='None', secure=secure, expires=refresh_token_expire) 
         return response
 
+class RefreshResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity=current_user, fresh=False)
+
+        user = User.get_by_id(user_id=current_user)
+
+        user = user_schema.dump(user)
+
+        access_token_expire = current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES')
         
+        secure = os.getenv('ENVIRONMENT') == 'production'
+
+        response = make_response(user, HTTPStatus.OK)
+        response.set_cookie('access_token', access_token, httponly=True, samesite='None', secure=secure, expires=access_token_expire)
+        return response
+    
+class RevokeResource(Resource):
+    @jwt_required()
+    def post(self):
+        jti = get_jwt()['jti']
+        now = datetime.now(timezone.utc)
+        db.session.add(TokenBlocklist(jti=jti, created_at=now))
+        db.session.commit()
+
+        return {'message': 'Se ha revocado el token'}, HTTPStatus.OK
 
