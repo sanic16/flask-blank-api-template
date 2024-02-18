@@ -53,7 +53,7 @@ class UserRecoverResource(Resource):
         json_data = request.get_json()
 
         try:
-            data = user_schema.load(data=json_data, partial=('username',))
+            data = user_schema.load(data=json_data, partial=('username', 'password'))
         except ValidationError as error:
             return {
                 'message': 'Error al validar los datos',

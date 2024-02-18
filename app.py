@@ -7,7 +7,7 @@ from extensions import db, jwt, mail
 
 from resources.user import (UserListResource, UserActivateResource, UserRecoverResource, UserPasswordResource, 
                             UserChangePasswordResource)
-from resources.token import (TokenResource)
+from resources.token import (TokenResource, RefreshResource, RevokeResource)
 
 from models.token import TokenBlocklist
 
@@ -43,6 +43,8 @@ def register_resources(app):
     api.add_resource(UserPasswordResource, '/api/users/password/<string:token>')
 
     api.add_resource(TokenResource, '/api/token') 
+    api.add_resource(RefreshResource, '/api/refresh')
+    api.add_resource(RevokeResource, 'api/revoke')
 
 app = create_app()
 
