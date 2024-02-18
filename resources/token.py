@@ -141,7 +141,7 @@ class TokenMobileResource(Resource):
         }, HTTPStatus.OK
     
 class RefreshMobileResource(Resource):
-    @jwt_required(refresh=True)
+    @jwt_required(refresh=True, locations=['headers'])
     def post(self):
         current_user = get_jwt_identity()
         access_token = create_access_token(identity=current_user, fresh=False)
