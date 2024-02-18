@@ -93,3 +93,13 @@ class RevokeResource(Resource):
 
         return {'message': 'Se ha revocado el token'}, HTTPStatus.OK
 
+class RevokeRefreshResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        jti = get_jwt()['jti']
+        now = datetime.now(timezone.utc)
+        db.session.add(TokenBlocklist(jti=jti, created_at=now))
+        db.session.commit()
+
+        return {'message': 'Se ha revocado el refresh token'}, HTTPStatus.OK
+
