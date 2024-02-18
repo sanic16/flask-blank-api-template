@@ -6,7 +6,7 @@ from config import Config
 from extensions import db, jwt, mail
 
 from resources.user import (UserListResource, UserActivateResource, UserRecoverResource, UserPasswordResource, 
-                            UserChangePasswordResource)
+                            UserChangePasswordResource, UserResource, MeResource)
 from resources.token import (TokenResource, RefreshResource, RevokeResource, RevokeRefreshResource,
                             TokenMobileResource, RefreshMobileResource)
 
@@ -38,6 +38,8 @@ def register_resources(app):
 
     api.add_resource(UserListResource, '/api/v1/users')   
     api.add_resource(UserChangePasswordResource, '/api/v1/users/change-password')
+    api.add_resource(UserResource, '/api/v1/users/<string:username>')
+    api.add_resource(MeResource, '/api/v1/users/me')
 
     api.add_resource(UserActivateResource, '/api/v1/users/activate/<string:token>')
     api.add_resource(UserRecoverResource, '/api/v1/users/recover')

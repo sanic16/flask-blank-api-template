@@ -25,6 +25,7 @@ load_dotenv()
 
 user_schema = UserSchema()
 
+
 class TokenResource(Resource):
     def post(self):
         json_data = request.get_json()
