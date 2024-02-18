@@ -14,7 +14,7 @@ from emails import send_email
 from utils import generate_confirmation_token, verify_token, hash_password, check_password
 
 user_schema = UserSchema()
-user_public_schema = UserSchema(exclude=('email', 'is_admin', 'is_active', 'created_at', 'updated_at'))
+user_public_schema = UserSchema(exclude=('email', 'is_admin', 'updated_at'))
 
 update_password_schema = UpdatePasswordSchema()
 
