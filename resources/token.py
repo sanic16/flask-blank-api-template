@@ -55,8 +55,8 @@ class TokenResource(Resource):
         user = user_schema.dump(user)
 
 
-        access_token_expire = current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES')
-        refresh_token_expire = current_app.config.get('JWT_REFRESH_TOKEN_EXPIRES')
+        access_token_expire = datetime.now(timezone.utc) + current_app.config.get('JWT_ACCESS_TOKEN_EXPIRES')
+        refresh_token_expire = datetime.now(timezone.utc) + current_app.config.get('JWT_REFRESH_TOKEN_EXPIRES')
 
         secure = os.getenv('ENVIRONMENT') == 'production'
 
